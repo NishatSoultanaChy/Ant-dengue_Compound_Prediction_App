@@ -69,9 +69,8 @@ X
 load_model = pickle.load(open('finalized_model_ET_42.pkl', 'rb'))
 
 # Apply model to make predictions
-prediction = load_model.predict(X)
+output = load_model.predict(X)
 
 st.header('Predicted pIC50(M) value')
-output = prediction.apply(str)
 output
 
