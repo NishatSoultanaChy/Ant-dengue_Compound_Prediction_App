@@ -41,20 +41,22 @@ This app predicts the **Bioactivity (pIC50)** values of molecules!
 st.header('Enter SMILES Code:')
 
 ## Read SMILES input
-SMILES_input = "CCC"
+SMILES_input = "NCCCC\nCCC\nCN"
 
 SMILES = st.text_area("SMILES input",  SMILES_input)
 
+SMILES = "C\n" + SMILES #Adds C as a dummy, first item
+SMILES = SMILES.split('\n'
+                      
 st.header('Input SMILES')
-SMILES
+SMILES[1:] # Skips the dummy first item
+
 
 ## Calculate molecular descriptors
 st.header('Computed molecular descriptors')
-#desc = from_smiles('CCC')
+desc = from_smiles([SMILES], threads = 1)
 
-#st.header('Descriptors')
-
-X = pd.DataFrame(from_smiles([SMILES], threads = 1))
+X = pd.DataFrame(desc)
 
 
 #selecting input features
@@ -67,7 +69,7 @@ X = X[["SpMax7_Bhi", "IC5", "nRotB", "SpMin8_Bhs", "SpAD_Dzv", "AATSC2e", "ATSC1
 X.replace([np.inf, -np.inf], np.nan, inplace=True)
 X = X.astype("float64")
 X = pd.DataFrame(X).fillna(0)
-X
+X[1:]# Skips the dummy first item
 
 ######################
 # Pre-built model
@@ -77,7 +79,7 @@ X
 load_model = pickle.load(open('finalized_model_ET_42.pkl', 'rb'))
 
 # Apply model to make predictions
-prediction = load_model.predict(X)
+output = load_model.predict(X)
 
 st.header('Predicted pIC50(M) value')
-prediction
+output[1:] # Skips the dummy first item
